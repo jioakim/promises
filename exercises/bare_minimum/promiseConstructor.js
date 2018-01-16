@@ -7,14 +7,35 @@
 var fs = require('fs');
 var request = require('request');
 var Promise = require('bluebird');
+var eol = require('eol');
 
 // This function should retrieve the first line of the file at `filePath`
 var pluckFirstLineFromFileAsync = function(filePath) {
-  // TODO
-};
+  return  new Promise(function(resolve, reject) {
+    fs.readFile(filePath, 'utf8', function(err, content) {
+      if (err) {
+        console.log('fs.readFile failed :(\n', err)
+        reject(err);
+      } else {
+        var lines = eol.split(content);
+        console.log(lines[0]);
+        resolve(lines[0]);
+      }
+    });
+  });
+}
 
 // This function should retrieve the status code of a GET request to `url`
 var getStatusCodeAsync = function(url) {
+  return new Promise(function(resolve, reject){
+    request(url, function(err, response, body) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(response.statusCode);
+      }
+    });
+  });
   // TODO
 };
 
